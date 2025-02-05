@@ -61,6 +61,7 @@ jobs:
         if: github.ref == 'refs/heads/master'
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+           publish_dir: ./dist  # 构建后的输出目录
           branch: gh-pages  # default: gh-pages
           folder: dist
           clean: true # Automatically remove deleted files from the deploy branch

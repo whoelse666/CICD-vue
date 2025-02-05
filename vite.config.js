@@ -4,6 +4,7 @@ import legacy from "@vitejs/plugin-legacy";
 
 // https://vite.dev/config/
 export default defineConfig({
+  publicPath: process.env.NODE_ENV === 'production' ? './' : '/',
   base: "./",
   plugins: [
     vue(),
