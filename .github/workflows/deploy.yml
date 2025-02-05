@@ -37,5 +37,5 @@ jobs:
           publish_branch: gh-pages  # 指定部署到 gh-pages 分支
 
       # 6. 验证 dist 目录
-      - name: List dist directory
-        run: ls -la ./dist
+      # - name: List dist directory
+      #   run: ls -la ./dist
