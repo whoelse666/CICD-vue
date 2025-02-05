@@ -12,7 +12,7 @@ import HelloWorld from './components/HelloWorld.vue'
     </a>
 
   </div>
-  <HelloWorld msg="Vite + Vue 91888" />
+  <HelloWorld msg="Vite + Vue whoelse 91888  " />
 </template>
 
 <style scoped>
