@@ -1,21 +1,43 @@
-name: Build and Deploy
-on: [push]
-permissions:
-  contents: write
+name: 打包并输出到master分支进行预览
+
+# 检测只有主分支的push操作会触发该工作流
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch: # 允许手动触发该工作流
+
 jobs:
-  build-and-deploy:
-    concurrency: ci-${{ github.ref }} # Recommended if you intend to make multiple deployments in quick succession.
+  build:
+    name: 打包
     runs-on: ubuntu-latest
+    permissions:
+      contents: write # 确保有写权限
+
     steps:
-      - name: Checkout 🛎️
+      - name: 克隆仓库
         uses: actions/checkout@v4
-
-      - name: Install and Build 🔧 # This example project is built using npm and outputs the result to the 'build' folder. Replace with the commands required to build your project, or remove this step entirely if your site is pre-built.
-        run: |
-          npm ci
-          npm run build
-
-      - name: Deploy 🚀
-        uses: JamesIves/github-pages-deploy-action@v4
         with:
-          folder: build # The folder the action should deploy.
+          ref: master # 指定主分支
+
+      - name: 指定Node.js版本
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: 安装pnpm
+        run: npm install pnpm -g
+
+      - name: 安装依赖
+        run: pnpm install
+
+      - name: 打包
+        run: pnpm build --mode github-master
+
+      - name: 部署到master分支
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          publish_branch: master
+          full_commit_message: ${{ github.event.head_commit.message }}
